@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "LifeOS",
+    "slug": "lifeos",
+    "scheme": "lifeos",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.prodo.lifeos"
+    },
+    "android": {
+      "package": "com.prodo.lifeos",
+      "versionCode": 1,
+      "allowBackup": false,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundColor": "#7657E8",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": ["POST_NOTIFICATIONS"],
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "color": "#7657E8"
+        }
+      ],
+      "expo-font",
+      "expo-localization",
+      [
+        "expo-splash-screen",
+        {
+          "imageWidth": 200,
+          "backgroundColor": "#7657E8",
+          "resizeMode": "contain",
+          "dark": {
+            "backgroundColor": "#0F0E17"
+          },
+          "image": "./assets/splash-icon.png"
+        }
+      ],
+      "expo-sharing"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

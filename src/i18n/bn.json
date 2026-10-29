@@ -1,0 +1,76 @@
+{
+  "appName": "লাইফওএস",
+  "common": {
+    "appName": "লাইফওএস",
+    "cancel": "বাতিল",
+    "close": "বন্ধ",
+    "retry": "পুনরায় চেষ্টা",
+    "comingSoon": "পরবর্তী ফেজে আসছে",
+    "save": "সংরক্ষণ",
+    "delete": "মুছে ফেলা",
+    "edit": "সম্পাদনা",
+    "done": "হয়েছে",
+    "undo": "পূর্বাবস্থা",
+    "confirm": "নিশ্চিত"
+  },
+  "tabs": {
+    "today": "আজ",
+    "tasks": "কাজ",
+    "calendar": "ক্যালেন্ডার",
+    "grow": "অগ্রগতি",
+    "notes": "নোট"
+  },
+  "today": {
+    "tagline": "আপনার জীবন, এক শান্ত জায়গা।",
+    "subtitle": "কম পরিকল্পনা করুন। বেশি করুন।",
+    "devGallery": "ডেভ গ্যালারি খুলুন"
+  },
+  "tasks": {
+    "title": "কাজ",
+    "emptyTitle": "এখনো কোনো কাজ নেই",
+    "emptyBody": "প্রথম কাজ যোগ করে শুরু করুন।"
+  },
+  "calendar": {
+    "title": "ক্যালেন্ডার",
+    "emptyTitle": "কোনো ইভেন্ট নেই",
+    "emptyBody": "আপনার সময়সূচি এখানে দেখাবে।"
+  },
+  "grow": {
+    "title": "অগ্রগতি",
+    "emptyTitle": "কোনো অভ্যাস বা লক্ষ্য নেই",
+    "emptyBody": "একটি অভ্যাস শুরু করুন বা লক্ষ্য নির্ধারণ করুন।"
+  },
+  "notes": {
+    "title": "নোট",
+    "emptyTitle": "কোনো নোট নেই",
+    "emptyBody": "অনুভূতি, তালিকা, এবং খসড়া সংরক্ষণ করুন।"
+  },
+  "gallery": {
+    "title": "ডেভ গ্যালারি",
+    "theme": "থিম",
+    "lightPalette": "হালকা প্যালেট",
+    "darkPalette": "গভীর প্যালেট",
+    "typography": "টাইপোগ্রাফি",
+    "spacing": "স্পেসিং",
+    "radius": "ত্রিজ্যা",
+    "gradients": "গ্রেডিয়েন্ট",
+    "resolvedScheme": "সমাধান করা স্কিম: {{scheme}} · ভাষা: {{language}}",
+    "system": "সিস্টেম",
+    "light": "হালকা",
+    "dark": "গভীর"
+  },
+  "settings": {
+    "theme": "থিম",
+    "language": "ভাষা",
+    "english": "English",
+    "bangla": "বাংলা",
+    "modeSystem": "সিস্টেম",
+    "modeLight": "হালকা",
+    "modeDark": "গভীর"
+  },
+  "quickAdd": {
+    "title": "দ্রুত যোগ",
+    "body": "দ্রুত ক্যাপচার ফেজ ২-এ উপলব্ধ হবে।",
+    "close": "বন্ধ"
+  }
+}

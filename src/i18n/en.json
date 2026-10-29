@@ -1,0 +1,76 @@
+{
+  "appName": "LifeOS",
+  "common": {
+    "appName": "LifeOS",
+    "cancel": "Cancel",
+    "close": "Close",
+    "retry": "Retry",
+    "comingSoon": "Coming in the next phase",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "done": "Done",
+    "undo": "Undo",
+    "confirm": "Confirm"
+  },
+  "tabs": {
+    "today": "Today",
+    "tasks": "Tasks",
+    "calendar": "Calendar",
+    "grow": "Grow",
+    "notes": "Notes"
+  },
+  "today": {
+    "tagline": "Your life, one calm place.",
+    "subtitle": "Plan less. Do more.",
+    "devGallery": "Open dev gallery"
+  },
+  "tasks": {
+    "title": "Tasks",
+    "emptyTitle": "No tasks yet",
+    "emptyBody": "Add your first task to get started."
+  },
+  "calendar": {
+    "title": "Calendar",
+    "emptyTitle": "No events",
+    "emptyBody": "Your schedule will appear here."
+  },
+  "grow": {
+    "title": "Grow",
+    "emptyTitle": "No habits or goals",
+    "emptyBody": "Start a habit or set a goal."
+  },
+  "notes": {
+    "title": "Notes",
+    "emptyTitle": "No notes",
+    "emptyBody": "Capture ideas, lists, and drafts."
+  },
+  "gallery": {
+    "title": "Dev Gallery",
+    "theme": "Theme",
+    "lightPalette": "Light palette",
+    "darkPalette": "Dark palette",
+    "typography": "Typography",
+    "spacing": "Spacing",
+    "radius": "Radius",
+    "gradients": "Gradients",
+    "resolvedScheme": "Resolved scheme: {{scheme}} · Language: {{language}}",
+    "system": "system",
+    "light": "light",
+    "dark": "dark"
+  },
+  "settings": {
+    "theme": "Theme",
+    "language": "Language",
+    "english": "English",
+    "bangla": "বাংলা",
+    "modeSystem": "System",
+    "modeLight": "Light",
+    "modeDark": "Dark"
+  },
+  "quickAdd": {
+    "title": "Quick Add",
+    "body": "Quick capture will be available in Phase 2.",
+    "close": "Close"
+  }
+}
