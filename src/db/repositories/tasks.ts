@@ -1,6 +1,7 @@
-import { and, asc, eq, inArray, isNull, type SQL } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNull, lt, type SQL } from 'drizzle-orm';
 
 import { newId } from '@/core/ids';
+import { systemClock } from '@/core/clock';
 
 import { tasks, type NewTaskRow, type TaskRow } from '../schema';
 import type { Executor } from '../transaction';
@@ -21,6 +22,7 @@ export type TaskFilter = {
   dueLocalDate?: string;
   includeDeleted?: boolean;
   limit?: number;
+  overdue?: boolean;
 };
 
 export function listTasks(executor: Executor, filter: TaskFilter = {}): TaskRow[] {
@@ -42,10 +44,23 @@ export function listTasks(executor: Executor, filter: TaskFilter = {}): TaskRow[
     conditions.push(eq(tasks.dueLocalDate, filter.dueLocalDate));
   }
 
+  if (filter.overdue) {
+    const today = systemClock.todayLocalDate();
+    const overdueCondition = and(
+      lt(tasks.dueLocalDate, today),
+      isNull(tasks.completedAt),
+      inArray(tasks.status, ['todo', 'doing']),
+    );
+    if (overdueCondition) conditions.push(overdueCondition);
+  }
+
+  const whereClause = conditions.length > 0 ? and(...conditions) : isNull(tasks.deletedAt);
+  if (!whereClause) throw new Error('Failed to build where clause');
+
   const query = executor
     .select()
     .from(tasks)
-    .where(conditions.length ? and(...conditions) : undefined)
+    .where(whereClause)
     .orderBy(asc(tasks.sortOrder), asc(tasks.createdAt));
 
   return filter.limit ? query.limit(filter.limit).all() : query.all();

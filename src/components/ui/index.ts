@@ -14,3 +14,4 @@ export * from './SectionHeader';
 export * from './Skeleton';
 export * from './Snackbar';
 export * from './SnackbarStore';
+export * from './SwipeableRow';
