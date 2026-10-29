@@ -1,6 +1,10 @@
 import { monotonicFactory } from 'ulid';
 
-const generateUlid = monotonicFactory();
+function prng(): number {
+  return Math.random();
+}
+
+const generateUlid = monotonicFactory(prng);
 
 export function newId(): string {
   return generateUlid();

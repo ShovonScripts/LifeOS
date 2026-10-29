@@ -6,7 +6,7 @@ import { useTheme } from '@/theme/useTheme';
 import { TaskService } from '@/features/tasks/service';
 import { HabitService } from '@/features/habits/service';
 import { SectionHeader, EmptyState } from '@/components/ui';
-import { Search, Flame, Clock, Check, BarChart2 } from 'lucide-react-native';
+import { Search, Flame, Clock, Check, BarChart2, Sparkles, Settings } from 'lucide-react-native';
 import type { TaskRow, HabitRow } from '@/db/schema';
 
 export default function TodayDashboardScreen() {
@@ -49,36 +49,60 @@ export default function TodayDashboardScreen() {
             <Text style={[theme.typography.caption, { color: theme.colors.textSecondary }]}>
               TODAY&apos;S DASHBOARD
             </Text>
-            <Text style={[theme.typography.h1, { color: theme.colors.text }]}>Hello!</Text>
+            <Text style={[theme.typography.h1, { color: theme.colors.text }]}>LifeOS</Text>
           </View>
 
           <View style={styles.headerIcons}>
             <TouchableOpacity
+              onPress={() => router.push('/ai' as const)}
+              style={styles.iconBtn}
+              accessibilityLabel="AI Assistant"
+            >
+              <Sparkles size={20} color={theme.colors.primary} />
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={() => router.push('/review' as const)}
               style={styles.iconBtn}
+              accessibilityLabel="Weekly Review"
             >
-              <BarChart2 size={22} color={theme.colors.text} />
+              <BarChart2 size={20} color={theme.colors.text} />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push('/search' as const)}
               style={styles.iconBtn}
+              accessibilityLabel="Search"
             >
-              <Search size={22} color={theme.colors.text} />
+              <Search size={20} color={theme.colors.text} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push('/settings' as const)}
+              style={styles.iconBtn}
+              accessibilityLabel="Settings"
+            >
+              <Settings size={20} color={theme.colors.text} />
             </TouchableOpacity>
           </View>
         </View>
 
-        <ScrollView contentContainerStyle={styles.scrollContent}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
           {/* Focus Timer Launch Card */}
           <TouchableOpacity
             style={[styles.focusWidget, { backgroundColor: theme.colors.primary }]}
             onPress={() => router.push('/focus' as const)}
+            activeOpacity={0.9}
           >
-            <Clock size={28} color="#fff" />
+            <View style={styles.focusIconBg}>
+              <Clock size={24} color="#fff" />
+            </View>
             <View style={{ flex: 1 }}>
-              <Text style={[theme.typography.bodyStrong, { color: '#fff' }]}>Deep Work Focus</Text>
-              <Text style={[theme.typography.caption, { color: 'rgba(255,255,255,0.8)' }]}>
-                Start a 25-min Pomodoro timer
+              <Text style={[theme.typography.bodyStrong, { color: '#fff', fontSize: 16 }]}>
+                Deep Work Focus
+              </Text>
+              <Text style={[theme.typography.caption, { color: 'rgba(255,255,255,0.85)' }]}>
+                Start a 25-min Pomodoro session
               </Text>
             </View>
           </TouchableOpacity>
@@ -101,6 +125,9 @@ export default function TodayDashboardScreen() {
                   <TouchableOpacity
                     onPress={() => handleToggleTask(t)}
                     style={styles.checkboxContainer}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: isDone }}
+                    accessibilityLabel={`Mark ${t.title} as ${isDone ? 'incomplete' : 'complete'}`}
                   >
                     <View
                       style={[
@@ -162,9 +189,16 @@ export default function TodayDashboardScreen() {
                   >
                     {h.name}
                   </Text>
-                  <Text style={[theme.typography.caption, { color: theme.colors.textSecondary }]}>
-                    {streak} days streak
-                  </Text>
+                  <View style={styles.streakBadge}>
+                    <Text
+                      style={[
+                        theme.typography.caption,
+                        { color: theme.colors.text, fontWeight: '600' },
+                      ]}
+                    >
+                      🔥 {streak} days
+                    </Text>
+                  </View>
                 </View>
               );
             })
@@ -184,31 +218,45 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 16,
   },
-  headerIcons: { flexDirection: 'row', gap: 12 },
-  iconBtn: { padding: 6 },
-  scrollContent: { gap: 16, paddingBottom: 40 },
+  headerIcons: { flexDirection: 'row', gap: 8 },
+  iconBtn: { padding: 8, borderRadius: 10 },
+  scrollContent: { gap: 14, paddingBottom: 40 },
   focusWidget: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 18,
-    borderRadius: 18,
+    borderRadius: 20,
     gap: 16,
+  },
+  focusIconBg: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 14,
-    borderRadius: 12,
+    padding: 16,
+    borderRadius: 16,
     borderWidth: 1,
     gap: 12,
   },
   checkboxContainer: { padding: 2 },
   checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 5,
+    width: 22,
+    height: 22,
+    borderRadius: 6,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  streakBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    backgroundColor: 'rgba(245, 158, 11, 0.12)',
   },
 });

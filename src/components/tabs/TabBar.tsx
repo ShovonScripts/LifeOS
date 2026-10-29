@@ -1,181 +1,158 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/useTheme';
+import { Sun, CheckSquare, Calendar, TrendingUp, FileText } from 'lucide-react-native';
 
 export interface TabBarProps {
-  state: { routes: { name: string }[]; index: number };
-  descriptors: any;
-  navigateToTab: (routeKey: string) => void;
-  insets: { top: number; bottom: number; left: number; right: number };
+  state: { routes: { key: string; name: string }[]; index: number } | unknown;
+  navigation?: unknown;
+  navigateToTab?: (routeKey: string) => void;
+  descriptors?: Record<string, unknown>;
+  insets?: { top: number; bottom: number; left: number; right: number };
 }
 
-export function TabBar({ state, navigateToTab, insets }: TabBarProps) {
+export function TabBar({ state, navigation, navigateToTab }: TabBarProps) {
   const theme = useTheme();
+  const safeAreaInsets = useSafeAreaInsets();
 
-  const tabs = ['today', 'tasks', 'calendar', 'grow', 'notes'] as const;
-  const labels: Record<string, string> = {
-    today: 'Today',
-    tasks: 'Tasks',
-    calendar: 'Calendar',
-    grow: 'Grow',
-    notes: 'Notes',
+  const stateObj = state as { routes: { key: string; name: string }[]; index: number };
+  const navObj = navigation as {
+    emit?: (event: { type: string; target: string; canPreventDefault: boolean }) => {
+      defaultPrevented: boolean;
+    };
+    navigate?: (name: string) => void;
+  };
+
+  const tabRoutes = stateObj.routes;
+
+  const getIcon = (name: string, color: string) => {
+    switch (name) {
+      case 'index':
+        return <Sun size={20} color={color} />;
+      case 'tasks':
+        return <CheckSquare size={20} color={color} />;
+      case 'calendar':
+        return <Calendar size={20} color={color} />;
+      case 'grow':
+        return <TrendingUp size={20} color={color} />;
+      case 'notes':
+        return <FileText size={20} color={color} />;
+      default:
+        return <Sun size={20} color={color} />;
+    }
+  };
+
+  const getLabel = (name: string) => {
+    switch (name) {
+      case 'index':
+        return 'Today';
+      case 'tasks':
+        return 'Tasks';
+      case 'calendar':
+        return 'Calendar';
+      case 'grow':
+        return 'Grow';
+      case 'notes':
+        return 'Notes';
+      default:
+        return name;
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.tabBar, { paddingBottom: insets.bottom }]}>
-        {tabs.slice(0, 2).map((name) => (
-          <TabButton
-            key={name}
-            name={name}
-            label={labels[name] ?? name}
-            focused={state.index === tabs.indexOf(name)}
-            onPress={() => navigateToTab(name)}
-            theme={theme}
-          />
-        ))}
-        <View style={styles.fabSpacer} />
-        {tabs.slice(2).map((name) => (
-          <TabButton
-            key={name}
-            name={name}
-            label={labels[name] ?? name}
-            focused={state.index === tabs.indexOf(name)}
-            onPress={() => navigateToTab(name)}
-            theme={theme}
-          />
-        ))}
-      </View>
-    </View>
-  );
-}
-
-interface TabButtonProps {
-  name: string;
-  label: string;
-  focused: boolean;
-  onPress: () => void;
-  theme: ReturnType<typeof useTheme>;
-}
-
-function TabButton({ name, label, focused, onPress, theme }: TabButtonProps) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ selected: focused }}
-      onPress={onPress}
-      hitSlop={16}
-      style={[
-        styles.tabButton,
-        focused
-          ? { backgroundColor: theme.colors.primarySoft }
-          : { backgroundColor: 'transparent' },
-      ]}
-    >
-      <View style={styles.iconWrapper}>
-        <TabIcon name={name} focused={focused} theme={theme} />
-      </View>
-      <Text
-        style={[
-          theme.typography.micro,
-          { color: focused ? theme.colors.primary : theme.colors.textSecondary },
-        ]}
-      >
-        {label}
-      </Text>
-    </Pressable>
-  );
-}
-
-function TabIcon({
-  name,
-  focused,
-  theme,
-}: {
-  name: string;
-  focused: boolean;
-  theme: ReturnType<typeof useTheme>;
-}) {
-  return (
     <View
       style={[
-        styles.icon,
-        { backgroundColor: focused ? theme.colors.primary : 'transparent', borderRadius: 999 },
+        styles.tabBarContainer,
+        {
+          backgroundColor: theme.colors.surface,
+          borderTopColor: theme.colors.border,
+          paddingBottom: Math.max(safeAreaInsets.bottom, 8),
+        },
       ]}
     >
-      <TabIconText name={name} focused={focused} theme={theme} />
-    </View>
-  );
-}
+      <View style={styles.tabRow}>
+        {tabRoutes.map((route, index) => {
+          const isFocused = stateObj.index === index;
+          const label = getLabel(route.name);
+          const color = isFocused ? theme.colors.primary : theme.colors.textSecondary;
 
-function TabIconText({
-  name,
-  focused,
-  theme,
-}: {
-  name: string;
-  focused: boolean;
-  theme: ReturnType<typeof useTheme>;
-}) {
-  const text =
-    name === 'today'
-      ? 'home'
-      : name === 'tasks'
-        ? 'check'
-        : name === 'calendar'
-          ? 'calendar'
-          : name === 'grow'
-            ? 'sprout'
-            : 'file-text';
-  return (
-    <Text
-      style={[
-        styles.iconText,
-        { color: focused ? theme.colors.textOnPrimary : theme.colors.textSecondary },
-      ]}
-    >
-      {text}
-    </Text>
+          const onPress = () => {
+            if (navObj?.emit) {
+              const event = navObj.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
+              if (!isFocused && !event.defaultPrevented && navObj.navigate) {
+                navObj.navigate(route.name);
+              }
+            } else if (navObj?.navigate) {
+              navObj.navigate(route.name);
+            } else if (navigateToTab) {
+              navigateToTab(route.name);
+            }
+          };
+
+          return (
+            <Pressable
+              key={route.key}
+              accessibilityRole="button"
+              accessibilityLabel={label}
+              accessibilityState={{ selected: isFocused }}
+              onPress={onPress}
+              style={styles.tabButton}
+            >
+              <View
+                style={[
+                  styles.iconContainer,
+                  isFocused && { backgroundColor: theme.colors.primarySoft },
+                ]}
+              >
+                {getIcon(route.name, color)}
+              </View>
+
+              <Text
+                style={[
+                  theme.typography.caption,
+                  {
+                    fontSize: 11,
+                    fontWeight: isFocused ? '600' : '400',
+                    color,
+                  },
+                ]}
+              >
+                {label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'transparent',
+  tabBarContainer: {
+    borderTopWidth: 1,
+    paddingTop: 8,
+    paddingHorizontal: 8,
   },
-  tabBar: {
+  tabRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    height: 64,
-    paddingHorizontal: 8,
-    backgroundColor: 'transparent',
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    minWidth: 60,
+  },
+  iconContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 4,
     borderRadius: 16,
-  },
-  iconWrapper: {
-    width: 36,
-    height: 36,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  icon: {
-    width: 28,
-    height: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconText: {
-    fontSize: 16,
-  },
-  fabSpacer: {
-    width: 60,
   },
 });

@@ -10,6 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { useTheme } from '@/theme/useTheme';
 import { useTasks } from '@/features/tasks/hooks';
 import { EmptyState, Chip, Button } from '@/components/ui';
@@ -20,6 +21,8 @@ type FilterTab = 'all' | 'today' | 'upcoming' | 'done';
 
 export default function TasksScreen() {
   const theme = useTheme();
+  const router = useRouter();
+
   const [activeTab, setActiveTab] = useState<FilterTab>('all');
   const [quickInput, setQuickInput] = useState('');
 
@@ -82,7 +85,10 @@ export default function TasksScreen() {
           </View>
         </TouchableOpacity>
 
-        <View style={styles.taskContent}>
+        <TouchableOpacity
+          style={styles.taskContent}
+          onPress={() => router.push(`/task/${item.id}` as const)}
+        >
           <Text
             style={[
               theme.typography.body,
@@ -106,7 +112,7 @@ export default function TasksScreen() {
               <View style={[styles.priorityDot, { backgroundColor: priorityColor }]} />
             )}
           </View>
-        </View>
+        </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => deleteTask(item.id)}

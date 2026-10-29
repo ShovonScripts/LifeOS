@@ -32,7 +32,7 @@ export default function AIPlanPreviewScreen() {
       }
 
       Alert.alert('Applied Successfully', 'AI proposed tasks have been created!');
-      router.replace('/(tabs)' as const);
+      router.replace('/');
     } catch {
       Alert.alert('Error', 'Failed to apply proposed tasks.');
     }

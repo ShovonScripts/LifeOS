@@ -42,6 +42,10 @@ export function FAB({ icon: Icon, onPress, accessibilityLabel, size = 60, testID
 
 const styles = StyleSheet.create({
   fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 80,
+    zIndex: 999,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#7657E8',

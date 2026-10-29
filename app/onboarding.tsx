@@ -43,7 +43,7 @@ export default function OnboardingScreen() {
     } catch {
       // handled
     }
-    router.replace('/(tabs)' as const);
+    router.replace('/');
   };
 
   const currentSlide = slides[step] ?? slides[0]!;
