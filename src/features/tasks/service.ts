@@ -2,6 +2,7 @@ import { db } from '@/db/client';
 import {
   createTask as repoCreateTask,
   deleteTask as repoDeleteTask,
+  getTask as repoGetTask,
   listTasks,
   updateTask as repoUpdateTask,
   completeTask as repoCompleteTask,
@@ -11,6 +12,7 @@ import { runInTransaction } from '@/db/transaction';
 import type { TaskRow } from '@/db/schema';
 import { AppError } from '@/core/errors';
 import { parseQuickAdd } from '@/domain/parser';
+import { getNextOccurrence } from '@/domain/recurrence';
 import {
   createTaskSchema,
   updateTaskSchema,
@@ -24,6 +26,14 @@ export class TaskService {
       return listTasks(db, filter);
     } catch (error) {
       throw new AppError({ code: 'DB_ERROR', userMessage: 'Failed to load tasks', cause: error });
+    }
+  }
+
+  static get(id: string): TaskRow | undefined {
+    try {
+      return repoGetTask(db, id);
+    } catch (error) {
+      throw new AppError({ code: 'DB_ERROR', userMessage: 'Failed to fetch task', cause: error });
     }
   }
 
@@ -70,6 +80,11 @@ export class TaskService {
     const now = new Date().toISOString();
     try {
       return runInTransaction(db, (tx) => {
+        const task = repoGetTask(tx, id);
+        if (!task) {
+          throw new AppError({ code: 'NOT_FOUND', userMessage: 'Task not found' });
+        }
+
         if (currentStatus === 'done') {
           const updated = repoUpdateTask(tx, id, { status: 'todo', completedAt: null });
           if (!updated) throw new AppError({ code: 'NOT_FOUND', userMessage: 'Task not found' });
@@ -77,6 +92,23 @@ export class TaskService {
         } else {
           const updated = repoCompleteTask(tx, id, now);
           if (!updated) throw new AppError({ code: 'NOT_FOUND', userMessage: 'Task not found' });
+
+          // Spawns next recurring occurrence if RRULE is present
+          if (task.recurrenceRule) {
+            const nextDueDate = getNextOccurrence(task.recurrenceRule, new Date());
+            if (nextDueDate) {
+              repoCreateTask(tx, {
+                title: task.title,
+                notes: task.notes,
+                priority: task.priority,
+                projectId: task.projectId,
+                recurrenceRule: task.recurrenceRule,
+                dueLocalDate: nextDueDate,
+                status: 'todo',
+              });
+            }
+          }
+
           return updated;
         }
       });

@@ -5,7 +5,7 @@ export const taskPrioritySchema = z.enum(['none', 'low', 'medium', 'high']);
 
 export const createTaskSchema = z.object({
   title: z.string().min(1, 'Title is required').max(500),
-  description: z.string().max(5000).optional().nullable(),
+  notes: z.string().max(5000).optional().nullable(),
   status: taskStatusSchema.default('todo'),
   priority: taskPrioritySchema.default('none'),
   dueLocalDate: z
