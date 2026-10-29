@@ -68,7 +68,7 @@ function emit(level: LogLevel, message: string, meta?: Record<string, unknown>):
     return;
   }
 
-  console.info(line);
+  console.log(line);
 }
 
 export const logger = {

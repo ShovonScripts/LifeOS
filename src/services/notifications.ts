@@ -1,6 +1,9 @@
 import * as Notifications from 'expo-notifications';
 import { AndroidImportance } from 'expo-notifications';
 import { Platform } from 'react-native';
+import { lightColors } from '@/theme/light';
+
+const NOTIFICATION_CHANNEL_COLOR = lightColors.primary;
 
 // Configure default notification handler
 Notifications.setNotificationHandler({
@@ -23,7 +26,7 @@ export class NotificationService {
         name: 'Task & Event Reminders',
         importance: AndroidImportance.HIGH,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#6366F1',
+        lightColor: NOTIFICATION_CHANNEL_COLOR,
       });
     }
   }

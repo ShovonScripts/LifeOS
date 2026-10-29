@@ -10,7 +10,7 @@ module.exports = defineConfig([
   },
   {
     rules: {
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': ['warn', { allow: ['warn', 'error', 'info', 'log'] }],
     },
   },
 ]);

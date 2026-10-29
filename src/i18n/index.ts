@@ -7,6 +7,7 @@ import bn from './bn.json';
 const resources = { en: { translation: en }, bn: { translation: bn } } as const;
 
 if (!i18n.isInitialized) {
+  // eslint-disable-next-line import/no-named-as-default-member
   i18n.use(initReactI18next).init({
     resources,
     lng: 'en',
